@@ -13,8 +13,6 @@ To run this project:
 
 5. To retrieve all mounts, go to /mounts
 
-    -if you get an error try to edit the splice range on line 39 in the server.js-file. 
-
 6. To retrieve all mounts that a certain player has, go to /profile/:realm/:username
 (:realm is replaced by the actual realm name and :username is replaced by the name of the user you wish to see the list of mounts).
 
