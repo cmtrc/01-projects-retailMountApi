@@ -1,18 +1,9 @@
 To run this project:
 
 1. Clone the project
-2. Create an .env file, with a variable named TOKEN. The value of this is the response you get from the curl command:
-
-curl -u {client_id}:{client_secret} -d grant_type=client_credentials https://us.battle.net/oauth/token
-
-  2.1 You need to fill inn the Client ID and Client Secret from the client you have set up on Blizzard for access to their APIs.
-  2.2 In postman do the following:
-
-      2.2.1 Import->Raw Text-> post the curl string from 2.1 -> Continue -> confirm with "import"
-
-      2.2.2 Go to the Headers-tab->Authorization -> copy the the string from value which starts with "basic"(basic should not be included in the string
-
-      2.2.3 Create the .env file in the root directory of the project with the following: "TOKEN="<your string from 2.2.2(dont include basic)"
+2. Create an .env file where you enter your client id and client secret in the following format: 
+  CLIENTID="<client id goes here>"
+  CLIENT_SECRET="<client secret goes here>"
       
 3. Run the server from terminal with the following command-> node server.js
 
