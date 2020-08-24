@@ -59,7 +59,7 @@ const getAllcreatureRequests = (mounts, access_token) => {
 
 // Index page
 router.get("/", (req, res) => {
-  res.json({ message: "dette er index-siden" });
+  res.json({ message: "Index page loaded" });
 });
 
 // Mounts
