@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Headers
 const getHeaders = () => {
   const token = process.env.TOKEN;
   const urlencoded = new URLSearchParams();
@@ -25,6 +26,7 @@ const getHeaders = () => {
   return requestOptions;
 };
 
+// AccessToken
 const getAccessToken = async () => {
   return fetch("https://us.battle.net/oauth/token", getHeaders())
     .then((res) => res.json())
@@ -35,6 +37,8 @@ const getAccessToken = async () => {
     });
 };
 
+// Retrieves mounts from the Game Data API. Set to first 100 as default. Edit the splice to the amount of mounts you want to retrieve.
+// If you remove the splice, it should return all mounts
 const requestsForMount = (json, access_token) => {
   return json.mounts.splice(0, 100).map((mount) => {
     const id = mount.id;
@@ -44,6 +48,7 @@ const requestsForMount = (json, access_token) => {
   });
 };
 
+// Creature request
 const getAllcreatureRequests = (mounts, access_token) => {
   return mounts.map((mount) => {
     const creatureId = mount.creature_displays[0].id;
@@ -52,10 +57,12 @@ const getAllcreatureRequests = (mounts, access_token) => {
   });
 };
 
+// Index page
 router.get("/", (req, res) => {
   res.json({ message: "dette er index-siden" });
 });
 
+// Mounts
 const modyfiedMounts = [];
 router.get("/mounts", (req, res) => {
   let allMounts = [];
@@ -98,6 +105,8 @@ router.get("/mounts", (req, res) => {
     });
   }
 });
+
+// Realm and username mount-search
 router.get("/profile/:realm/:user", (req, res) => {
   const username = req.params.user;
   const realm = req.params.realm;
@@ -116,6 +125,7 @@ router.get("/profile/:realm/:user", (req, res) => {
     });
   }
 });
+
 app.use(router);
 app.listen(port);
 console.log("Listening on port " + port);
