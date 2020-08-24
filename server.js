@@ -39,10 +39,9 @@ const getAccessToken = async () => {
     });
 };
 
-// Retrieves mounts from the Game Data API. Set to first 100 as default. Edit the splice to the amount of mounts you want to retrieve.
-// If you remove the splice, it should return all mounts
+// Retrieves mounts from the Game Data API
 const requestsForMount = (json, access_token) => {
-  return json.mounts.splice(0, 100).map((mount) => {
+  return json.mounts.map((mount) => {
     const id = mount.id;
     return fetch(
       `https://us.api.blizzard.com/data/wow/mount/${id}?namespace=static-us&locale=en_US&access_token=${access_token}`
@@ -53,9 +52,15 @@ const requestsForMount = (json, access_token) => {
 // Creature request
 const getAllcreatureRequests = (mounts, access_token) => {
   return mounts.map((mount) => {
-    const creatureId = mount.creature_displays[0].id;
-    const url = `https://us.api.blizzard.com/data/wow/media/creature-display/${creatureId}?namespace=static-us&locale=en_US&access_token=${access_token}`;
-    return fetch(url);
+    if (
+      mount &&
+      mount.creature_displays &&
+      mount.creature_displays.length > 0
+    ) {
+      const creatureId = mount.creature_displays[0].id;
+      const url = `https://us.api.blizzard.com/data/wow/media/creature-display/${creatureId}?namespace=static-us&locale=en_US&access_token=${access_token}`;
+      return fetch(url);
+    }
   });
 };
 
@@ -81,28 +86,63 @@ router.get("/mounts", (req, res) => {
         .then((json) => {
           const requests = requestsForMount(json, access_token); // create all request for individual mounts
           Promise.all(requests)
-            .then((responses) => Promise.all(responses.map((r) => r.json()))) // return all responses
+            .then((responses) =>
+              Promise.all(
+                responses.map((r) => {
+                  if (r && r.ok) {
+                    return r.json();
+                  }
+                })
+              ).catch((err) => {
+                console.log("mounterror", err);
+              })
+            ) // return all responses
             .then((mounts) => {
               allMounts = mounts;
               const reqs = getAllcreatureRequests(mounts, access_token); // create all requests for the mounts images
               // make all request for mounts images
               Promise.all(reqs).then((responses) =>
-                Promise.all(responses.map((r) => r.json())).then(
-                  (creaturesMedia) => {
+                Promise.all(
+                  responses.map((r) => {
+                    if (r && r.ok) {
+                      return r.json();
+                    }
+                  })
+                )
+                  .then((creaturesMedia) => {
                     creaturesMedia.forEach((creatureMedia, index) => {
-                      allMounts[index].href = creatureMedia.assets[0].value;
+                      if (
+                        creatureMedia &&
+                        creatureMedia.assets &&
+                        creatureMedia.assets.length > 0
+                      ) {
+                        allMounts[index].href = creatureMedia.assets[0].value;
+                      }
                     });
                     allMounts.forEach((mount) => {
-                      modyfiedMounts.push({
-                        name: mount.name,
-                        bilde: mount.href,
-                      });
+                      if (mount) {
+                        modyfiedMounts.push({
+                          name: mount.name,
+                          bilde: mount.href,
+                        });
+                      }
                     });
                     return res.send(modyfiedMounts);
-                  }
-                )
+                  })
+                  .catch((error) => {
+                    console.error("ERROR HAS OCCURED", error);
+                    res.send(error);
+                  })
               );
+            })
+            .catch((error) => {
+              console.error("ERROR HAS OCCURED", error);
+              res.send(error);
             });
+        })
+        .catch((error) => {
+          console.error("ERROR HAS OCCURED", error);
+          res.send(error);
         });
     });
   }
