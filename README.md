@@ -3,9 +3,9 @@ To run this project:
 1. Clone the project
 2. Create an .env file where you enter your client id and client secret in the following format: 
 
-    CLIENTID="<client id goes here>"
+    CLIENTID="client id goes here"
   
-    CLIENT_SECRET="<client secret goes here>"
+    CLIENT_SECRET="client secret goes here"
       
 3. Run the server from terminal with the following command-> node server.js
 
