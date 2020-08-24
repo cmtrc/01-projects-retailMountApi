@@ -115,7 +115,7 @@ router.get("/profile/:realm/:user", (req, res) => {
   if (username && realm) {
     getAccessToken().then((accessTokenResponse) => {
       const access_token = accessTokenResponse.access_token;
-      const url = `https://us.api.blizzard.com/profile/wow/character/${realm}/${username}/collections/mounts?namespace=profile-us&locale=en_US&access_token=${access_token}`;
+      const url = `https://eu.api.blizzard.com/profile/wow/character/${realm}/${username}/collections/mounts?namespace=profile-eu&locale=en_GB&access_token=${access_token}`;
       fetch(url)
         .then((res) => res.json())
         .then((json) => res.send(json));
