@@ -12,7 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Headers
 const getHeaders = () => {
-  const token = process.env.TOKEN;
+  const token = Buffer.from(
+    `${process.env.CLIENTID}:${process.env.CLIENT_SECRET}`
+  ).toString("base64");
   const urlencoded = new URLSearchParams();
   urlencoded.append("grant_type", "client_credentials");
   const requestOptions = {
