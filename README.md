@@ -18,4 +18,6 @@ To run this project:
 6. To retrieve all mounts that a certain player has, go to /profile/:realm/:username
 (:realm is replaced by the actual realm name and :username is replaced by the name of the user you wish to see the list of mounts).
 
+E.g: http://localhost:8080/profile/tichondrius/tabletips
+
 Happy stalking!
