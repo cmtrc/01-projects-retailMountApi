@@ -16,7 +16,7 @@ curl -u {client_id}:{client_secret} -d grant_type=client_credentials https://us.
       
 3. Run the server from terminal with the following command-> node server.js
 
-4. run localhost/8080 in your browser
+4. run localhost:8080 in your browser
 
 5. To retrieve all mounts, go to /mounts
 
