@@ -19,6 +19,7 @@ curl -u {client_id}:{client_secret} -d grant_type=client_credentials https://us.
 4. run localhost/8080 in your browser
 
 5. To retrieve all mounts, go to /mounts
+
     -if you get an error try to edit the splice range on line 39 in the server.js-file. 
 
 6. To retrieve all mounts that a certain player has, go to /profile/:realm/:username
